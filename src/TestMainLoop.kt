@@ -5,37 +5,60 @@ fun input(): String {
 fun endTurn(city: City, events: EventsInAction) {
     events.eventsInAction.forEach {
         event -> event.decrement()
-        if(event.turnsToComplete <= 0) {
-
+        if(event.turnsToComplete <= 0) { //that means action can now happen
+//            if(eventActionHandler(event)) {
+//                println("success")
+//            } else {
+//                println(event.endResult)
+//            }
         }
         println(event.turnsToComplete)
 
     }
 }
+//will return either true for success or false for failure
+fun eventActionHandler(event: Event): Boolean {
+    return true
+}
+
+//will return either true for success or false for failure
+fun eventResourceDeductionHandler(city: City, event: Event): Boolean {
+    val (cFood, cWood, cStone) = city.resources
+    val (eFood, eWood, eStone) = event.resourceCost
+    if (cFood >= eFood && cWood >= eWood && cStone >= eStone) {
+        city.resources = ResourceArray(food=(cFood-eFood), wood=(cWood-eWood), stone=(cStone-eStone) )
+        return true
+    }
+    return false
+}
 
 fun cityStats(city: City) {
     println("City Name: ${city.name}")
     println("${city.stronghold}")
-    println("City Food Storage: ${city.foodStorage}")
+    println("${city.resources}")
 }
 
 fun gameloop(city: City, events: EventsInAction) {
-    var game: Boolean = true
+    val game = true
 
     loop@ while(game) {
         val choice = input()
         when(choice) {
             "0" -> {
-                game = false
                 break@loop
             }
             "1" -> cityStats(city)
             "2" -> {
-                val newLevel = city.stronghold.upgrade()
+                city.stronghold.upgrade()
                 println("${city.name}'s Stronghold is now Level ${city.stronghold.level}")
             }
             "3" -> { //Train troops
-                events.eventsInAction.add(Event("Train Troops", 2))
+                val newEvent = Event("Train Troops", 2, ResourceArray(200.0,200.0,50.0) ,"Create 100 Troops")
+                if(eventResourceDeductionHandler(city, newEvent)) {
+                    events.eventsInAction.add(newEvent)
+                } else {
+                    println("You are not eligible to do this action!")
+                }
                 println(events.eventsInAction.toString())
             }
             "4" -> {
@@ -55,7 +78,7 @@ fun main(args: Array<String>) {
     //start the game and get the new name of the city
 
     //create EventsInAction
-    val events: EventsInAction = EventsInAction()
+    val events = EventsInAction()
 
     //main game loop
     gameloop(myCity, events)

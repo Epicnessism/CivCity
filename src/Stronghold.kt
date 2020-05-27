@@ -1,9 +1,8 @@
 class Stronghold {
     var level: Int = 0
 
-    fun upgrade(): Int {
+    fun upgrade() {
         level++
-        return level
     }
 
     override fun toString(): String {

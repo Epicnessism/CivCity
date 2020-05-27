@@ -1,5 +1,5 @@
 class City(val name: String) {
     val stronghold: Stronghold = Stronghold()
-    val foodStorage: Float = 0.0F
+    var resources: ResourceArray = ResourceArray(1000.0,1000.0,1000.0)
 
 }
