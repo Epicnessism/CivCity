@@ -13,22 +13,32 @@ fun endTurn(city: City, events: EventsInAction) {
     }
 }
 
+fun cityStats(city: City) {
+    println("City Name: ${city.name}")
+    println("${city.stronghold}")
+    println("City Food Storage: ${city.foodStorage}")
+}
+
 fun gameloop(city: City, events: EventsInAction) {
     var game: Boolean = true
 
-    while(game) {
+    loop@ while(game) {
         val choice = input()
         when(choice) {
-            "0" -> game = false
-            "1" -> {
+            "0" -> {
+                game = false
+                break@loop
+            }
+            "1" -> cityStats(city)
+            "2" -> {
                 val newLevel = city.stronghold.upgrade()
                 println("${city.name}'s Stronghold is now Level ${city.stronghold.level}")
             }
-            "2" -> { //Train troops
+            "3" -> { //Train troops
                 events.eventsInAction.add(Event("Train Troops", 2))
                 println(events.eventsInAction.toString())
             }
-            "3" -> {
+            "4" -> {
                 val removedEvent = events.eventsInAction.remove()
                 println(events.eventsInAction.toString())
             }
@@ -49,5 +59,4 @@ fun main(args: Array<String>) {
 
     //main game loop
     gameloop(myCity, events)
-
 }

@@ -6,4 +6,8 @@ class Stronghold {
         return level
     }
 
+    override fun toString(): String {
+        return "Stronghold Level ${level}, something else here"
+    }
+
 }
