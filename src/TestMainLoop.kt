@@ -38,15 +38,35 @@ fun cityStats(city: City) {
     println("${city.resources}")
 }
 
+fun interactWithEventsLoop(city: City, events: EventsInAction) {
+    loop@ while(true) {
+        println("Actions:")
+        println("0: back")
+        println("1: View All Events")
+        println("2: ")
+        println("3: ")
+        println("4: ")
+        val choice = input()
+        when(choice) {
+            "0" -> break@loop
+            "1" -> println(events.eventsInAction.toString())
+        }
+    }
+}
+
 fun gameloop(city: City, events: EventsInAction) {
     val game = true
 
     loop@ while(game) {
+        println("Actions:")
+        println("0: End turn")
+        println("1: View City Stats")
+        println("2: Upgrade Stronghold")
+        println("3: Train 100 Troops")
+        println("4: View Queued Events")
         val choice = input()
         when(choice) {
-            "0" -> {
-                break@loop
-            }
+            "0" -> break@loop
             "1" -> cityStats(city)
             "2" -> {
                 city.stronghold.upgrade()
@@ -56,14 +76,16 @@ fun gameloop(city: City, events: EventsInAction) {
                 val newEvent = Event("Train Troops", 2, ResourceArray(200.0,200.0,50.0) ,"Create 100 Troops")
                 if(eventResourceDeductionHandler(city, newEvent)) {
                     events.eventsInAction.add(newEvent)
+                    println("${newEvent.eventTitle} successfully started.")
                 } else {
                     println("You are not eligible to do this action!")
                 }
-                println(events.eventsInAction.toString())
             }
             "4" -> {
-                val removedEvent = events.eventsInAction.remove()
-                println(events.eventsInAction.toString())
+                //take player to another loop for now I guess?
+                interactWithEventsLoop(city, events)
+//                val removedEvent = events.eventsInAction.remove()
+//                println(events.eventsInAction.toString())
             }
         }
         endTurn(city, events)
